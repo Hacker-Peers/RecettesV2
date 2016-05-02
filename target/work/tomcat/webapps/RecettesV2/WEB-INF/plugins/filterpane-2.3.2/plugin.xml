@@ -1,0 +1,31 @@
+<plugin name='filterpane' version='2.3.2' grailsVersion='1.3 &gt; *'>
+  <author>Grails Plugin Consortium</author>
+  <title>Grails FilterPane Plugin</title>
+  <description>This plugin adds automatic and customizable filtering capabilities to any Grails application's list views.</description>
+  <documentation>http://grails-plugin-consortium.github.io/grails-filterpane/</documentation>
+  <type>FilterpaneGrailsPlugin</type>
+  <resources>
+    <resource>FilterpaneResources</resource>
+    <resource>org.grails.plugin.filterpane.FilterPaneService</resource>
+    <resource>org.grails.plugin.filterpane.FilterPaneTagLib</resource>
+  </resources>
+  <repositories>
+    <repository name='grailsCentral' url='http://grails.org/plugins' />
+    <repository name='mavenCentral' url='http://repo1.maven.org/maven2/' />
+    <repository name='http://repo.grails.org/grails/libs-releases' url='http://repo.grails.org/grails/libs-releases/' />
+    <repository name='http://m2repo.spockframework.org/ext/' url='http://m2repo.spockframework.org/ext/' />
+    <repository name='http://grails.org/plugins' url='http://grails.org/plugins' />
+  </repositories>
+  <dependencies>
+    <test>
+      <dependency group='org.spockframework' name='spock-grails-support' version='0.7-groovy-2.0' />
+    </test>
+  </dependencies>
+  <plugins>
+    <compile>
+      <plugin group='org.grails.plugins' name='joda-time' version='1.4' />
+    </compile>
+  </plugins>
+  <runtimePluginRequirements />
+  <behavior />
+</plugin>
