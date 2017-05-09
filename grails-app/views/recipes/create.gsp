@@ -22,7 +22,7 @@
 				</g:eachError>
 			</ul>
 			</g:hasErrors>
-			<g:form url="[resource:recipesInstance, action:'save']" >
+			<g:form url="[resource:recipesInstance, action:'save']"  enctype="multipart/form-data" useToken="true">
 				<fieldset class="form">
 					<g:render template="form"/>
 				</fieldset>
