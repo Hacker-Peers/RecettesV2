@@ -41,8 +41,11 @@
         <label for="reference">
             <g:message code="recipes.reference.label" default="Reference" />
         </label>
-        <g:textField name="reference" value="${recipesInstance?.reference}"/>
-
+        <g:textField name="reference" value="${recipesInstance?.reference}"/><br/>
+	    <label for="recipeFile">
+			<g:message code="recipes.recipeFile.label" default="or Upload a file" />
+		</label>
+		<input type="file" name="recipeFile"/>
     </div>
 
     <div class="fieldcontain ${hasErrors(bean: recipesInstance, field: 'notes', 'error')} ">

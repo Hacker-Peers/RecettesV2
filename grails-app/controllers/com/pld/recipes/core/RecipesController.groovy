@@ -7,15 +7,17 @@ import org.grails.comments.CommentLink
 import grails.converters.JSON
 import com.pld.recipes.security.User
 import grails.plugin.springsecurity.annotation.Secured
+import org.springframework.web.multipart.*
 
 @Transactional(readOnly = true)
 class RecipesController {
 
-    static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
+    static allowedMethods = [save: "POST", update: "POST", delete: "DELETE"]
 
     def filterPaneService
     def searchableService
     def springSecurityService
+	def grailsApplication
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
@@ -167,11 +169,13 @@ class RecipesController {
         recipesInstance.lastUpdatedBy = recipesInstance.createdBy
         recipesInstance.lastUpdatedOn = recipesInstance.createdOn
 
+		uploadRecipeFileIfProvided(recipesInstance, request);
+        
         if (recipesInstance.hasErrors()) {
             respond recipesInstance.errors, view:'create'
             return
         }
-        
+		
         recipesInstance.save flush:true
 
         request.withFormat {
@@ -200,6 +204,9 @@ class RecipesController {
         recipesInstance.lastUpdatedBy = user.username
         recipesInstance.lastUpdatedOn = new Date()
 
+		if (!uploadRecipeFileIfProvided(recipesInstance, request)) {
+		
+		}
         
         if (recipesInstance.hasErrors()) {
             respond recipesInstance.errors, view:'edit'
@@ -246,4 +253,22 @@ class RecipesController {
             '*'{ render status: NOT_FOUND }
         }
     }
+	
+	void uploadRecipeFileIfProvided(Recipes recipesInstance, def baseRequest) {
+	    MultipartRequest request =  baseRequest as MultipartRequest
+		String content = request.getContentType()
+		if (content.contains("multipart/form-data") || (request instanceof MultipartHttpServletRequest)) {
+			MultipartFile uploadedFile = request.getFile('recipeFile')
+			if (uploadedFile && !uploadedFile.empty) {
+				def basePath = grailsApplication.config.recipes.cron.detectNewRecipes.basePath + "\\Uploaded"
+				File dest = new File(basePath, uploadedFile.originalFilename)
+				if (dest.exists()) {
+					dest = new File(basePath, System.currentTimeMillis() + "_" + uploadedFile.originalFilename)
+				}
+				uploadedFile.transferTo(dest)
+				recipesInstance.reference = dest.absolutePath
+			}
+		}
+
+	}
 }

@@ -23,7 +23,7 @@
                         </g:eachError>
                 </ul>
             </g:hasErrors>
-            <g:form url="[resource:recipesInstance, action:'update']" method="PUT" >
+            <g:form url="[resource:recipesInstance, action:'update']" method="POST"  enctype="multipart/form-data" useToken="true">
                 <g:hiddenField name="version" value="${recipesInstance?.version}" />
                 <fieldset class="form">
                     <g:render template="form"/>
