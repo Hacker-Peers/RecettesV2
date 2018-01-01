@@ -53,13 +53,29 @@ class RecipesController {
             respond Recipes.list(params), model:[recipesInstanceCount: Recipes.count()]
         }
     }
+	
+	def embed(Recipes recipesInstance) {
+		getDocument(recipesInstance, true)
+	}
+	
+	def download(Recipes recipesInstance) {
+		getDocument(recipesInstance, false)
+	}
     
-    def download(Recipes recipesInstance) {
+    private def getDocument(Recipes recipesInstance, boolean embedded) {
         if (recipesInstance?.reference?.matches("\\w{1}:.*")) {
             def file = new File(recipesInstance?.reference)
             if (file.exists()) {
-                response.setContentType("application/octet-stream")
-                response.setHeader("Content-disposition", "attachment; filename=${file.name}")
+			    if (file.name.toLowerCase().endsWith("pdf")) {
+					response.setContentType("application/pdf")
+			    } else if (file.name.toLowerCase().endsWith("jpg")) {
+					response.setContentType("image/jpeg")
+				} else {
+					response.setContentType("application/octet-stream")
+				}
+				if (!embedded) {
+					response.setHeader("Content-disposition", "attachment; filename=${file.name}")
+				}
                 response.outputStream << file.newInputStream()
                 return
             }

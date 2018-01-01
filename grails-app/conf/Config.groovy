@@ -135,7 +135,7 @@ grails.plugin.springsecurity.authority.className = 'com.pld.recipes.security.Rol
 grails.plugin.springsecurity.rejectIfNoRule = false
 grails.plugin.springsecurity.fii.rejectPublicInvocations = false
 
-recipes.cron.detectNewRecipes.basePath = 'D:\\Recettes'
+recipes.cron.detectNewRecipes.basePath = 'Z:\\Recettes'
 
 grails.plugin.springsecurity.controllerAnnotations.staticRules = [
 //	'/secure/*':                      ['permitAll'],

@@ -11,6 +11,11 @@
 	.ui-autocomplete-loading {
 		background: white url('http://jqueryui.com/resources/demos/autocomplete/images/ui-anim_basic_16x16.gif') right center no-repeat;
 	}
+	
+	.embedImg {
+		#transform: rotate(90deg);
+		max-width: 100%;
+	}
 	</style>
         <g:javascript>
             function split( val ) {
@@ -108,34 +113,6 @@
                     </li>
                 </g:if>
 
-                <g:if test="${recipesInstance?.reference}">
-                    <li class="fieldcontain">
-                        <span id="reference-label" class="property-label"><g:message code="recipes.reference.label" default="Reference" /></span>
-
-                        <span class="property-value" aria-labelledby="reference-label">
-                            <g:if test="${recipesInstance.reference.matches("\\w{1}:.*")}">
-                                <g:link action="download" id="${recipesInstance.id}">${new File(recipesInstance.reference).name}</g:link>
-                            </g:if>
-                            <g:elseif test="${recipesInstance.reference.matches("http.*")}">
-                                <a href="${recipesInstance.reference}" target="_displaySource"><g:fieldValue bean="${recipesInstance}" field="reference"/></a>
-                            </g:elseif>
-                            <g:else>
-                                <a href="http://${recipesInstance.reference}" target="_displaySource"><g:fieldValue bean="${recipesInstance}" field="reference"/></a>
-                            </g:else>
-                        </span>
-
-                    </li>
-                </g:if>
-
-                <g:if test="${recipesInstance?.notes}">
-                    <li class="fieldcontain">
-                        <span id="notes-label" class="property-label"><g:message code="recipes.notes.label" default="Notes" /></span>
-
-                        <span class="property-value" aria-labelledby="notes-label"><g:fieldValue bean="${recipesInstance}" field="notes"/></span>
-
-                    </li>
-                </g:if>
-
                 <li class="fieldcontain">
                     <span id="tags-label" class="property-label"><g:message code="recipes.tags.label" default="Tags" /></span>
 
@@ -170,6 +147,46 @@
                         </sec:ifNotGranted>
                     </span>
                 </li>
+
+                <g:if test="${recipesInstance?.reference}">
+                    <li class="fieldcontain">
+                        <span id="reference-label" class="property-label"><g:message code="recipes.reference.label" default="Reference" /></span>
+
+                        <span class="property-value" aria-labelledby="reference-label">
+                            <g:if test="${recipesInstance.reference.matches("\\w{1}:.*")}">
+                                <g:link action="download" id="${recipesInstance.id}">${new File(recipesInstance.reference).name}</g:link><br/>
+								<g:if test="${new File(recipesInstance.reference).name.toLowerCase().endsWith(".pdf")}">
+									<object data="/RecettesV2/recipes/embed/${recipesInstance.id}" type="application/pdf" width="100%" height="750px">
+										<embed src="/RecettesV2/recipes/embed/${recipesInstance.id}" type="application/pdf">
+											<p>This browser does not support PDFs.</p>
+										</embed>
+									</object>
+								</g:if>
+								<g:elseif test="${new File(recipesInstance.reference).name.toLowerCase().endsWith(".jpg")}">
+									<img class="embedImg" src="/RecettesV2/recipes/embed/${recipesInstance.id}"/>
+								</g:elseif>
+                            </g:if>
+                            <g:elseif test="${recipesInstance.reference.matches("http.*")}">
+                                <a href="${recipesInstance.reference}" target="_displaySource"><g:fieldValue bean="${recipesInstance}" field="reference"/></a><br/>
+								<iframe src="${recipesInstance.reference}" width="100%" height="750px"></iframe>
+                            </g:elseif>
+                            <g:else>
+                                <a href="http://${recipesInstance.reference}" target="_displaySource"><g:fieldValue bean="${recipesInstance}" field="reference"/></a><br/>
+								<iframe src="http://${recipesInstance.reference}" width="100%" height="750px"></iframe>
+                            </g:else>
+                        </span>
+
+                    </li>
+                </g:if>
+
+                <g:if test="${recipesInstance?.notes}">
+                    <li class="fieldcontain">
+                        <span id="notes-label" class="property-label"><g:message code="recipes.notes.label" default="Notes" /></span>
+
+                        <span class="property-value" aria-labelledby="notes-label"><g:fieldValue bean="${recipesInstance}" field="notes"/></span>
+
+                    </li>
+                </g:if>
 
                 <li class="fieldcontain">
                     <span id="created-label" class="property-label"><g:message code="recipes.createdby.label" default="Created by" /></span>
